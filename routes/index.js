@@ -8,5 +8,6 @@ exports.v1 = function(req,res) {
 };
 
 exports.v2 = function(req,res) {
-	res.render('index', { title: 'CS247 Chatroom v2', version: 2 });
+	res.render('index', { title: 'CS247 Chatroom v2', version: 0 });
 };
+
