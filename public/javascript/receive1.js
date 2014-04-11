@@ -17,6 +17,11 @@ function receiveOne(msg, videos){
   });
 }
 
+String.prototype.startsWith = function (str){
+  return this.indexOf(str) == 0;
+};
+
+
 // returns true if msg starts with emoticon
 function startsWithEmoticon(msg){
   return msg.startsWith(":)") || msg.startsWith(":(") || msg.startsWith("lol");
