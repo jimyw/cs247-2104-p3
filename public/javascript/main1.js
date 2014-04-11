@@ -11,6 +11,7 @@
   $(document).ready(function(){
     connect_to_chat_firebase();
     connect_webcam();
+
   });
 
   function connect_to_chat_firebase(){
@@ -37,7 +38,8 @@
       display_msg({m:snapshot.val().name+" joined the room",c: snapshot.val().c});
     });
     fb_instance_stream.on("child_added",function(snapshot){
-      display_msg(snapshot.val());
+      //display_msg(snapshot.val());
+      receiveOne(snapshot.val().msg, snapshot.val().videos);
     });
 
     // block until username is answered

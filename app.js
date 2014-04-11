@@ -40,7 +40,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
 // Declare your routes here
-app.get('/', routes.index);
 app.get('/v1',index.v1);
 app.get('/v2',index.v2);
 
