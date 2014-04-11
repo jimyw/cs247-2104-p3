@@ -3,7 +3,7 @@
 function receiveOne(msg, videos){
   var splitMsg = splitByEmoticon(msg);
   var currentVideoIndex = 0;
-  for(var msgSubpart in splitMsg){
+  splitMsg.forEach(function(msgSubpart)){
     // Based on if it starts with emoticon, we start with video vs msg substring
     if(startsWithEmoticon(msg)){
       displayVideo(videos[currentVideoIndex]);
@@ -14,7 +14,7 @@ function receiveOne(msg, videos){
       displayVideo(videos[currentVideoIndex]);
       currentVideoIndex += 1;
     }
-  }
+  });
 }
 
 // returns true if msg starts with emoticon
