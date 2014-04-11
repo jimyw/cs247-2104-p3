@@ -23,6 +23,8 @@ if (app.get('env') === 'development') {
 }
 
 
+
+
 // view engine setup
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('views', path.join(__dirname, 'views'));
