@@ -7,8 +7,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
 // Declare your route variables here.
 var routes = require('./routes');
+var index = require('./routes/index');
 var app = express();
 
 // enable sockiet io support
@@ -21,8 +23,6 @@ server.listen(process.env.PORT || 3000);
 if (app.get('env') === 'development') {
     console.log("Now listening on port 3000");
 }
-
-
 
 
 // view engine setup
@@ -41,6 +41,8 @@ app.use(app.router);
 
 // Declare your routes here
 app.get('/', routes.index);
+app.get('/v1',index.v1);
+app.get('/v2',index.v2);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
