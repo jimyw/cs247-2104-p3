@@ -38,7 +38,8 @@
     });
     fb_instance_stream.on("child_added",function(snapshot){
       //display_msg(snapshot.val());
-      console.log(snapshot.val().m);
+      console.log("snapsnot . v");
+      console.log(snapshot.val().v);
       receiveOne(snapshot.val().m, snapshot.val().v);
     });
 
@@ -54,8 +55,11 @@
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
         if(has_emotions($(this).val())){
+          console.log("HAS EMOTICONS");
+          console.log(videoBlobArray);
           fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
+          console.log("DOES NOT HAVE EMOTICONS");
           fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         }
         var videoBlobArray = new Array();
@@ -160,9 +164,9 @@
 
       $("#textbox").keyup(function( event ) {
         var currString = $("#textbox").val();
-        console.log('currString:'+currString)
+        //console.log('currString:'+currString)
         if (has_emotions(currString.slice(-3))) {
-          console.log('recorded in real time')
+          //console.log('recorded in real time')
           mediaRecorder.stop();
           mediaRecorder.start(10000000);
           // isRecording = true;
