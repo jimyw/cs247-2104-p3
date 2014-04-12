@@ -60,11 +60,13 @@
         function onComplete(error) {
           if (!error) {
             videoBlobArray = new Array();
+            console.log(videoBlobArray);
           }
         }
         if(has_emotions($(this).val())){
           console.log("HAS EMOTICONS");
           // console.log(videoBlobArray);
+          console.log(cur_video_blob)
           fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
           // fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
@@ -172,23 +174,22 @@
         var currString = $("#textbox").val();
         //console.log('currString:'+currString)
         if (has_emotions(currString.slice(-3))) {
-          console.log('Hit Enter to record yourself')
+          console.log('Hit SPACE to record yourself')
 
 
 
-          $("#textbox").keydown(function( event ) {
+          $("#textbox").keyup(function( event ) {
             
             
-            if (event.which == 13) { // enter is pressed
+            if (event.which == 32) { // ESC is pressed
               console.log('recording now')
               recording = true;
               mediaRecorder.start(5000);
-              console.log(' Now hit Enter to stop recording');
+              console.log(' Now hit ENTER to stop recording');
 
-              $("#textbox").keydown(function( event ) {
+              $("#textbox").keyup(function( event ) {
                 if (event.which == 13) { // enter is pressed
-                    // recording = false;
-                    mediaRecorder.stop();
+                    recording = false;
                     // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
                 }
               });
