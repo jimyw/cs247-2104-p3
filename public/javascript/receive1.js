@@ -5,7 +5,7 @@ function receiveOne(msg, videos){
   console.log(msg)
   var splitMsg = splitByEmoticon(msg);
   var currentVideoIndex = 0;
-  splitMsg.forEach(function(msgSubpart)){
+  splitMsg.forEach(function(msgSubpart){
     // Based on if it starts with emoticon, we start with video vs msg substring
     if(startsWithEmoticon(msg)){
       displayVideo(videos[currentVideoIndex]);
