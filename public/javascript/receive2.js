@@ -17,17 +17,23 @@ String.prototype.startsWith = function (str){
 function createNewMsgDiv(splitMsg, matchedEmoticons, originalMsg){
   var newMsgDivHtml = "";
   var currentEmoticonIndex = 0;
-  for(var msgSubpart in splitMsg){
+  splitMsg.forEach(function(msgSubpart){
+    console.log("msgsubpart:");
+    console.log(msgSubpart);
     if(startsWithEmoticon(originalMsg)){
       newMsgDivHtml = "<div>" + msgSubpart + "</div>";
-      newMsgDivHtml += matchedEmoticons[currentEmoticonIndex];
+      if(matchedEmoticons != null){
+        newMsgDivHtml += matchedEmoticons[currentEmoticonIndex];
+      }
       currentEmoticonIndex += 1;
     } else {
-      newMsgDivHtml = matchedEmoticons[currentEmoticonIndex];
+      if(matchedEmoticons != null){
+        newMsgDivHtml = matchedEmoticons[currentEmoticonIndex];
+      }
       currentEmoticonIndex += 1;
       newMsgDivHtml += "<div>" + msgSubpart + "</div>";
     }
-  }
+  });
   var newMsgDiv = document.createElement("div");
   newMsgDiv.innerHTML = newMsgDivHtml;
   return newMsgDiv;
