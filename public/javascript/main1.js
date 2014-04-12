@@ -50,8 +50,8 @@ function base64_to_blob(base64) {
     });
     fb_instance_stream.on("child_added",function(snapshot){
       //display_msg(snapshot.val());
-      //console.log("snapsnot . v");
-      //console.log(snapshot.val().v);
+      console.log("snapsnot . v");
+      console.log(snapshot.val().v);
       receiveOne(snapshot.val().m, snapshot.val().v);
     });
 

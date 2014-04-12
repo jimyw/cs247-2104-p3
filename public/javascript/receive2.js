@@ -4,7 +4,7 @@ var VIDEO_TIME_INTERVAL = 5000;
 
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
-function receiveOne(msg, videos){
+function receiveTwo(msg, videos){
   var splitMsg = msg.match(/\S+/g);
   var totalTime = 0;
   var currentVideoIndex = 0;
