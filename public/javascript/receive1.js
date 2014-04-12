@@ -10,9 +10,10 @@ function receiveOne(msg, videos){
   splitMsg.forEach(function(token, index){
     if(isEmoticon(token)){
       var thisVideoIndex = currentVideoIndex;
-      newMsgHtml += "<span class='emoticons' data='video" + currentVideoIndex + "' style='color:green;font-weight:bold'>" + token + "</span>";
-      var newVideoDiv = createVideoDiv(videos[thisVideoIndex]);
+      newMsgHtml += "<span class='emoticons' data='video" + thisVideoIndex + "' style='color:green;font-weight:bold'>" + token + "</span>";
+      var newVideoDiv = createVideoDiv(videos[thisVideoIndex], thisVideoIndex);
       videosDiv.appendChild(newVideoDiv);
+      currentVideoIndex += 1;
     } else {
       newMsgHtml += token + " ";
     };
@@ -23,8 +24,10 @@ function receiveOne(msg, videos){
 }
 
 function initialize_receive_one(){
-  $('.emoticons').hover(function(){
-
+  $('body').on('mouseenter','.emoticons',function(){
+    var videoId = $(this).attr("data");
+    var video = document.getElementById(videoId);
+    video.play();
   });
 }
 
@@ -32,8 +35,9 @@ function isEmoticon(token){
   return token === ":-)" || token === ":-(" || token === "lol";
 }
 
-function createVideoDiv(videoBlob){
+function createVideoDiv(videoBlob, videoIndex){
   var video = document.createElement("video");
+  video.id = "video" + videoIndex;
   video.autoplay = false;
   video.controls = false; // optional
   video.loop = true;
