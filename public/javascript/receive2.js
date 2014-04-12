@@ -21,17 +21,18 @@ function createNewMsgDiv(splitMsg, matchedEmoticons, originalMsg){
     console.log("msgsubpart:");
     console.log(msgSubpart);
     if(startsWithEmoticon(originalMsg)){
-      newMsgDivHtml = "<div>" + msgSubpart + "</div>";
       if(matchedEmoticons != null){
         newMsgDivHtml += matchedEmoticons[currentEmoticonIndex];
       }
       currentEmoticonIndex += 1;
+      newMsgDivHtml += "<div>" + msgSubpart + "</div>";
     } else {
+      newMsgDivHtml += "<div>" + msgSubpart + "</div>";
       if(matchedEmoticons != null){
-        newMsgDivHtml = matchedEmoticons[currentEmoticonIndex];
+        newMsgDivHtml += matchedEmoticons[currentEmoticonIndex];
       }
       currentEmoticonIndex += 1;
-      newMsgDivHtml += "<div>" + msgSubpart + "</div>";
+      
     }
   });
   var newMsgDiv = document.createElement("div");
@@ -50,7 +51,7 @@ function splitByEmoticon(msg, videos){
   // emoticonList is global variable defined in main1.js
   // Need to convert emoticon list into regex automatically?
   var splitMsg = msg.split(/:\)|:\(|lol/);
-  var matchedEmoticons = msg.match(/:\)|:\(|lol/);
+  var matchedEmoticons = msg.match(/:\)|:\(|lol/g);
   return {"splitMsg" : splitMsg, "matchedEmoticons" : matchedEmoticons};
 }
 

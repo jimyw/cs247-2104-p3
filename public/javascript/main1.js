@@ -34,11 +34,12 @@
 
     // listen to events
     fb_instance_users.on("child_added",function(snapshot){
-      display_msg({msg:snapshot.val().name+" joined the room",c: snapshot.val().c});
+      display_msg({m:snapshot.val().name+" joined the room",c: snapshot.val().c});
     });
     fb_instance_stream.on("child_added",function(snapshot){
       //display_msg(snapshot.val());
-      console.log(snapshot.val().m);
+      console.log("snapsnot . v");
+      console.log(snapshot.val().v);
       receiveOne(snapshot.val().m, snapshot.val().v);
     });
 
@@ -53,12 +54,15 @@
     // bind submission box
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
-        var videoBlobArray = new Array();
         if(has_emotions($(this).val())){
+          console.log("HAS EMOTICONS");
+          console.log(videoBlobArray);
           fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
+          console.log("DOES NOT HAVE EMOTICONS");
           fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         }
+        var videoBlobArray = new Array();
         $(this).val("");
         scroll_to_bottom(0);
       }
@@ -160,9 +164,9 @@
 
       $("#textbox").keyup(function( event ) {
         var currString = $("#textbox").val();
-        console.log('currString:'+currString)
+        //console.log('currString:'+currString)
         if (has_emotions(currString.slice(-3))) {
-          console.log('recorded in real time')
+          //console.log('recorded in real time')
           mediaRecorder.stop();
           mediaRecorder.start(10000000);
           // isRecording = true;

@@ -47,7 +47,6 @@ function displayMsgSubpart(msgSubpart){
   
   var timerId;
   function displayNextWord(){
-    console.log("In display next word");
     if(currentWordIndex != words.length){
       $("#receive_one_display").html(words[currentWordIndex]);
       currentWordIndex += 1;
