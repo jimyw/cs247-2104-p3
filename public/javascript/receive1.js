@@ -10,7 +10,7 @@ function receiveOne(msg, videos){
   splitMsg.forEach(function(token, index){
     if(isEmoticon(token)){
       var thisVideoIndex = currentVideoIndex;
-      newMsgHtml += "<span style='color:green;font-weight:bold'>" + token + "</span>";
+      newMsgHtml += "<span class='emoticons' data='video" + currentVideoIndex + "' style='color:green;font-weight:bold'>" + token + "</span>";
       var newVideoDiv = createVideoDiv(videos[thisVideoIndex]);
       videosDiv.appendChild(newVideoDiv);
     } else {
@@ -22,6 +22,11 @@ function receiveOne(msg, videos){
   document.getElementById("receive_two_display").appendChild(videosDiv);
 }
 
+function initialize_receive_one(){
+  $('.emoticons').hover(function(){
+
+  });
+}
 
 function isEmoticon(token){
   return token === ":-)" || token === ":-(" || token === "lol";
@@ -29,7 +34,7 @@ function isEmoticon(token){
 
 function createVideoDiv(videoBlob){
   var video = document.createElement("video");
-  video.autoplay = true;
+  video.autoplay = false;
   video.controls = false; // optional
   video.loop = true;
   video.width = 120;

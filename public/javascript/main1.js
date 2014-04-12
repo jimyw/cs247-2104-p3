@@ -21,6 +21,7 @@ function base64_to_blob(base64) {
   var options = ["lol",":-)",":-("];
 
   $(document).ready(function(){
+    initialize_receive_one();
     connect_to_chat_firebase();
     connect_webcam();
   });
