@@ -65,7 +65,7 @@
         if(has_emotions($(this).val())){
           console.log("HAS EMOTICONS");
           // console.log(videoBlobArray);
-          // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
+          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
           // fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
           console.log("DOES NOT HAVE EMOTICONS");
@@ -189,7 +189,7 @@
                 if (event.which == 13) { // enter is pressed
                     // recording = false;
                     mediaRecorder.stop();
-                    fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
+                    // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
                 }
               });
             }
