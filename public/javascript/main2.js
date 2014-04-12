@@ -4,7 +4,11 @@
 (function() {
 
   var cur_video_blob = null;
+  var videoBlobArray = new Array();
   var fb_instance;
+  var options = ["lol",":-)",":-("];
+  var recording = false;
+  var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
   $(document).ready(function(){
     connect_to_chat_firebase();
@@ -23,38 +27,51 @@
       fb_chat_room_id = Math.random().toString(36).substring(7);
     }
     display_msg({m:"Share this url with your friend to join this chat: "+ document.location.origin+"/#"+fb_chat_room_id,c:"red"})
-
+    console.log('starting')
     // set up variables to access firebase data structure
     var fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
     var fb_instance_users = fb_new_chat_room.child('users');
     var fb_instance_stream = fb_new_chat_room.child('stream');
-    var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
+    // var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
     fb_instance_users.on("child_added",function(snapshot){
       display_msg({m:snapshot.val().name+" joined the room",c: snapshot.val().c});
     });
     fb_instance_stream.on("child_added",function(snapshot){
-      //display_msg(snapshot.val());
-      receiveTwo(snapshot.val().msg, snapshot.val().videos);
+      display_msg(snapshot.val());
+      console.log("snapsnot . v");
+      // console.log(snapshot.val().v);
+      // receiveOne(snapshot.val().m, snapshot.val().v);
     });
 
     // block until username is answered
-    var username = window.prompt("Welcome, warrior! please declare your name?");
-    if(!username){
-      username = "anonymous"+Math.floor(Math.random()*1111);
-    }
+    // var username = window.prompt("Welcome, warrior! please declare your name?");
+    // if(!username){
+    //   username = "anonymous"+Math.floor(Math.random()*1111);
+    // }
+    var username = "anonymous"+Math.floor(Math.random()*1111);
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
 
     // bind submission box
     $("#submission input").keydown(function( event ) {
-      if (event.which == 13) {
-        if(has_emotions($(this).val())){
-          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color});
-        }else{
-          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
+      if (!recording && event.which == 13) {
+        function onComplete(error) {
+          if (!error) {
+            videoBlobArray = new Array();
+          }
         }
+        if(has_emotions($(this).val())){
+          console.log("HAS EMOTICONS");
+          // console.log(videoBlobArray);
+          // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
+          // fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
+        }else{
+          console.log("DOES NOT HAVE EMOTICONS");
+          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color}, onComplete);
+        }
+        videoBlobArray = new Array();
         $(this).val("");
         scroll_to_bottom(0);
       }
@@ -146,12 +163,50 @@
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
+            videoBlobArray.push(cur_video_blob);
+            // console.log(videoBlobArray);
           });
       };
-      setInterval( function() {
-        mediaRecorder.stop();
-        mediaRecorder.start(3000);
-      }, 3000 );
+
+      $("#textbox").keyup(function( event ) {
+        var currString = $("#textbox").val();
+        //console.log('currString:'+currString)
+        if (has_emotions(currString.slice(-3))) {
+          console.log('Hit Enter to record yourself')
+
+
+
+          $("#textbox").keydown(function( event ) {
+            
+            
+            if (event.which == 13) { // enter is pressed
+              console.log('recording now')
+              recording = true;
+              mediaRecorder.start(5000);
+              console.log(' Now hit Enter to stop recording');
+
+              $("#textbox").keydown(function( event ) {
+                if (event.which == 13) { // enter is pressed
+                    // recording = false;
+                    mediaRecorder.stop();
+                    fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
+                }
+              });
+            }
+          console.log(' Hit Enter to send')
+            // isRecording = true;
+
+            
+
+          });
+        }
+      });
+
+      // setInterval( function() {
+      //   mediaRecorder.stop();
+      //   mediaRecorder.start(3000);
+      // }, 3000 );
+
       console.log("connect to media stream!");
     }
 
@@ -166,7 +221,6 @@
 
   // check to see if a message qualifies to be replaced with video.
   var has_emotions = function(msg){
-    var options = ["lol",":)",":("];
     for(var i=0;i<options.length;i++){
       if(msg.indexOf(options[i])!= -1){
         return true;
