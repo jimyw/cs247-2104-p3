@@ -67,15 +67,21 @@ function base64_to_blob(base64) {
     // bind submission box
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
-        if(has_emotions($(this).val())){
-          //console.log("HAS EMOTICONS");
-          //console.log(videoBlobArray);
-          fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
-        }else{
-          //console.log("DOES NOT HAVE EMOTICONS");
-          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
+        function onComplete(error) {
+          if (!error) {
+            videoBlobArray = new Array();
+          }
         }
-        //videoBlobArray = new Array();
+
+        if(has_emotions($(this).val())){
+          console.log("HAS EMOTICONS");
+          console.log(videoBlobArray);
+          fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color}, onComplete);
+        }else{
+          console.log("DOES NOT HAVE EMOTICONS");
+          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color}, onComplete);
+        }
+
         $(this).val("");
         scroll_to_bottom(0);
       }
@@ -167,7 +173,6 @@ function base64_to_blob(base64) {
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             videoBlobArray.push(cur_video_blob);
-
           });
       };
 
