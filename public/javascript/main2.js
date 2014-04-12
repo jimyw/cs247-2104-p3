@@ -164,7 +164,7 @@
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             videoBlobArray.push(cur_video_blob);
-            // console.log(videoBlobArray);
+
           });
       };
 

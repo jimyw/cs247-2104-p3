@@ -1,6 +1,18 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
+function base64_to_blob(base64) {
+  var binary = atob(base64);
+  var len = binary.length;
+  var buffer = new ArrayBuffer(len);
+  var view = new Uint8Array(buffer);
+  for (var i = 0; i < len; i++) {
+    view[i] = binary.charCodeAt(i);
+  }
+  var blob = new Blob([view]);
+  return blob;
+  };
+
 (function() {
 
   var cur_video_blob = null;
@@ -38,8 +50,8 @@
     });
     fb_instance_stream.on("child_added",function(snapshot){
       //display_msg(snapshot.val());
-      console.log("snapsnot . v");
-      console.log(snapshot.val().v);
+      //console.log("snapsnot . v");
+      //console.log(snapshot.val().v);
       receiveOne(snapshot.val().m, snapshot.val().v);
     });
 
@@ -154,14 +166,12 @@
       mediaRecorder.video_height = video_height/2;
 
       mediaRecorder.ondataavailable = function (blob) {
-          //console.log("new data available!");
           video_container.innerHTML = "";
 
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             videoBlobArray.push(cur_video_blob);
-            console.log(videoBlobArray);
           });
       };
 
@@ -216,16 +226,5 @@
     reader.readAsDataURL(blob);
   };
 
-  var base64_to_blob = function(base64) {
-    var binary = atob(base64);
-    var len = binary.length;
-    var buffer = new ArrayBuffer(len);
-    var view = new Uint8Array(buffer);
-    for (var i = 0; i < len; i++) {
-      view[i] = binary.charCodeAt(i);
-    }
-    var blob = new Blob([view]);
-    return blob;
-  };
 
 })();
