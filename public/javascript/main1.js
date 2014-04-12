@@ -35,11 +35,12 @@
 
     // listen to events
     fb_instance_users.on("child_added",function(snapshot){
-      display_msg({m:snapshot.val().name+" joined the room",c: snapshot.val().c});
+      display_msg({msg:snapshot.val().name+" joined the room",c: snapshot.val().c});
     });
     fb_instance_stream.on("child_added",function(snapshot){
       //display_msg(snapshot.val());
-      receiveOne(snapshot.val().msg, snapshot.val().videos);
+      console.log(snapshot.val().m);
+      receiveOne(snapshot.val().m, snapshot.val().v);
     });
 
     // block until username is answered
@@ -72,8 +73,6 @@
   function display_msg(data){
     $("#conversation").append("<div class='msg' style='color:"+data.c+"'>"+data.m+"</div>");
     if(data.v){
-
-      for (var v in data.v) {
       // for video element
       var video = document.createElement("video");
       video.autoplay = true;
@@ -82,7 +81,7 @@
       video.width = 120;
 
       var source = document.createElement("source");
-      source.src =  URL.createObjectURL(base64_to_blob(v));
+      source.src =  URL.createObjectURL(base64_to_blob(data.v));
       source.type =  "video/webm";
 
       video.appendChild(source);
@@ -92,7 +91,6 @@
       // video.src = URL.createObjectURL(base64_to_blob(data.v));
 
       document.getElementById("conversation").appendChild(video);
-      }
     }
   }
 

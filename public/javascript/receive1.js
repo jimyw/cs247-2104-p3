@@ -1,6 +1,8 @@
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
 function receiveOne(msg, videos){
+  console.log('receiveOne')
+  console.log(msg)
   var splitMsg = splitByEmoticon(msg);
   var currentVideoIndex = 0;
   for(var msgSubpart in splitMsg){
@@ -19,7 +21,9 @@ function receiveOne(msg, videos){
 
 // returns true if msg starts with emoticon
 function startsWithEmoticon(msg){
-  return msg.startsWith(":)") || msg.startsWith(":(") || msg.startsWith("lol");
+  console.log('startsWithEmoticon')
+  console.log(msg)
+  return msg.startsWith(":-)") || msg.startsWith(":-(") || msg.startsWith("lol");
 }
 
 // Function that takes a string, and delimits it by emoticons and returns both delimited strings
