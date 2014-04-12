@@ -9,7 +9,6 @@
   $(document).ready(function(){
     connect_to_chat_firebase();
     connect_webcam();
-    
   });
 
   function connect_to_chat_firebase(){
