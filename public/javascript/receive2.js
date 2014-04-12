@@ -1,57 +1,56 @@
+var WORD_TIME_INTERVAL = 2000;
+var VIDEO_TIME_INTERVAL = 5000;
+
+
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
-function receiveTwo(msg, videos){
-  var splitResults = splitByEmoticon(msg);
-  var splitMsg = splitResults["splitMsg"];
-  var matchedEmoticons = splitResults["matchedEmoticons"];
-  console.log(splitMsg);
-  console.log(matchedEmoticons);
-  var newMsgDiv = createNewMsgDiv(splitMsg, matchedEmoticons, msg);
-  document.getElementById("conversation").appendChild(newMsgDiv);
+function receiveOne(msg, videos){
+  var splitMsg = msg.match(/\S+/g);
+  var totalTime = 0;
+  var currentVideoIndex = 0;
+  splitMsg.forEach(function(token, index){
+    if(isEmoticon(token)){
+      var thisVideoIndex = currentVideoIndex;
+      setTimeout(function(){
+        displayVideo(videos[thisVideoIndex]);
+      }, totalTime);
+      totalTime += VIDEO_TIME_INTERVAL;
+    } else {
+      setTimeout(function(){
+        displayWord(token);
+      }, totalTime);
+      totalTime += WORD_TIME_INTERVAL;
+      
+    };
+  });
+}
+
+
+function displayWord(token){
+  $("#receive_one_display").html(token);
 }
 
 String.prototype.startsWith = function (str){
   return this.indexOf(str) == 0;
 };
 
-function createNewMsgDiv(splitMsg, matchedEmoticons, originalMsg){
-  var newMsgDivHtml = "";
-  var currentEmoticonIndex = 0;
-  splitMsg.forEach(function(msgSubpart){
-    console.log("msgsubpart:");
-    console.log(msgSubpart);
-    if(startsWithEmoticon(originalMsg)){
-      if(matchedEmoticons != null){
-        newMsgDivHtml += matchedEmoticons[currentEmoticonIndex];
-      }
-      currentEmoticonIndex += 1;
-      newMsgDivHtml += "<div>" + msgSubpart + "</div>";
-    } else {
-      newMsgDivHtml += "<div>" + msgSubpart + "</div>";
-      if(matchedEmoticons != null){
-        newMsgDivHtml += matchedEmoticons[currentEmoticonIndex];
-      }
-      currentEmoticonIndex += 1;
-      
-    }
-  });
-  var newMsgDiv = document.createElement("div");
-  newMsgDiv.innerHTML = newMsgDivHtml;
-  return newMsgDiv;
+
+function isEmoticon(token){
+  return token === ":-)" || token === ":-(" || token === "lol";
 }
 
-// returns true if msg starts with emoticon
-function startsWithEmoticon(msg){
-  return msg.startsWith(":)") || msg.startsWith(":(") || msg.startsWith("lol");
-}
+// Function takes a vidxeo blob, converts it, and displays it.
+function displayVideo(videoBlob){
+  var video = document.createElement("video");
+  video.autoplay = true;
+  video.controls = false; // optional
+  video.loop = true;
+  video.width = 120;
+  var source = document.createElement("source");
+  source.src =  URL.createObjectURL(base64_to_blob(videoBlob));
+  source.type =  "video/webm";
 
-// Function that takes a string, and delimits it by emoticons and returns both delimited strings
-// as array and array of positions of where emoticons where
-function splitByEmoticon(msg, videos){
-  // emoticonList is global variable defined in main1.js
-  // Need to convert emoticon list into regex automatically?
-  var splitMsg = msg.split(/:\)|:\(|lol/);
-  var matchedEmoticons = msg.match(/:\)|:\(|lol/g);
-  return {"splitMsg" : splitMsg, "matchedEmoticons" : matchedEmoticons};
+  video.appendChild(source);
+  document.getElementById("receive_one_display").innerHTML = "";
+  document.getElementById("receive_one_display").appendChild(video);
 }
-

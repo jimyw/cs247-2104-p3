@@ -146,6 +146,7 @@
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
+            console.log(cur_video_blob);
           });
       };
       setInterval( function() {

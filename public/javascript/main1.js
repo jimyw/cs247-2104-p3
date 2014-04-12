@@ -1,6 +1,18 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
+function base64_to_blob(base64) {
+  var binary = atob(base64);
+  var len = binary.length;
+  var buffer = new ArrayBuffer(len);
+  var view = new Uint8Array(buffer);
+  for (var i = 0; i < len; i++) {
+    view[i] = binary.charCodeAt(i);
+  }
+  var blob = new Blob([view]);
+  return blob;
+  };
+
 (function() {
 
   var cur_video_blob = null;
@@ -38,8 +50,8 @@
     });
     fb_instance_stream.on("child_added",function(snapshot){
       //display_msg(snapshot.val());
-      console.log("snapsnot . v");
-      console.log(snapshot.val().v);
+      //console.log("snapsnot . v");
+      //console.log(snapshot.val().v);
       receiveOne(snapshot.val().m, snapshot.val().v);
     });
 
@@ -55,14 +67,14 @@
     $("#submission input").keydown(function( event ) {
       if (event.which == 13) {
         if(has_emotions($(this).val())){
-          console.log("HAS EMOTICONS");
-          console.log(videoBlobArray);
+          //console.log("HAS EMOTICONS");
+          //console.log(videoBlobArray);
           fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
-          console.log("DOES NOT HAVE EMOTICONS");
+          //console.log("DOES NOT HAVE EMOTICONS");
           fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         }
-        var videoBlobArray = new Array();
+        //videoBlobArray = new Array();
         $(this).val("");
         scroll_to_bottom(0);
       }
@@ -148,13 +160,13 @@
       mediaRecorder.video_height = video_height/2;
 
       mediaRecorder.ondataavailable = function (blob) {
-          //console.log("new data available!");
           video_container.innerHTML = "";
 
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             videoBlobArray.push(cur_video_blob);
+
           });
       };
 
@@ -209,16 +221,5 @@
     reader.readAsDataURL(blob);
   };
 
-  var base64_to_blob = function(base64) {
-    var binary = atob(base64);
-    var len = binary.length;
-    var buffer = new ArrayBuffer(len);
-    var view = new Uint8Array(buffer);
-    for (var i = 0; i < len; i++) {
-      view[i] = binary.charCodeAt(i);
-    }
-    var blob = new Blob([view]);
-    return blob;
-  };
 
 })();
