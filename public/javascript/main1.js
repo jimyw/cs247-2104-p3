@@ -68,7 +68,7 @@ function base64_to_blob(base64) {
     $("#waiting").remove();
 
     // bind submission box
-    $("#submission input").keydown(function( event ) {
+    $("#submission input").keyup(function( event ) {
       if (event.which == 13) {
         function onComplete(error) {
           if (!error) {
@@ -79,7 +79,7 @@ function base64_to_blob(base64) {
         if(has_emotions($(this).val())){
           console.log("HAS EMOTICONS");
           console.log(videoBlobArray);
-          fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color}, onComplete);
+          fb_instance_stream.push({m:username+": " +$(this).val(), v: cur_video_blob, c: my_color, t: emoticonTimeArray}, onComplete);
         }else{
           console.log("DOES NOT HAVE EMOTICONS");
           fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color}, onComplete);
@@ -180,7 +180,7 @@ function base64_to_blob(base64) {
       };
 
 
-      $("#textbox").keyup(function( event ) {
+      $("#textbox").keydown(function( event ) {
         var currString = $("#textbox").val();
         if (!startWriting) {    // has not started typing yet
           console.log('started typing now')
