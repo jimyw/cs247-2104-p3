@@ -56,7 +56,7 @@
     $("#waiting").remove();
 
     // bind submission box
-    $("#submission input").keydown(function( event ) {
+    $("#submission input").keyup(function( event ) {
       if (event.which == 13) {
         function onComplete(error) {
           if (!error) {
@@ -182,8 +182,7 @@
 
           // $("#textbox").keyup(function( event ) {
             
-            
-            if (event.which == 32 || event.which == 13) { // SPACE is pressed
+            // if (event.which == 32 || event.which == 13) { // SPACE is pressed
               console.log('recording now')
               recording = true;
               mediaRecorder.start(TIME_DELAY);
@@ -195,19 +194,12 @@
               //       // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
               //   }
               // });
-            }
-          console.log(' Hit Enter to send')
+            // }
             // isRecording = true;
 
           // });
         }
       });
-
-      // setInterval( function() {
-      //   mediaRecorder.stop();
-      //   mediaRecorder.start(3000);
-      // }, 3000 );
-
       console.log("connect to media stream!");
     }
 
