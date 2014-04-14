@@ -19,6 +19,9 @@ function base64_to_blob(base64) {
   var videoBlobArray = new Array();
   var fb_instance;
   var options = ["lol",":-)",":-("];
+  var startWriting = false;  // checks if user is typing something
+  var writingTimeStamp;
+  var emoticonTimeArray = new Array();  // time in miliseconds for when emoticon was detected
 
   $(document).ready(function(){
     initialize_receive_one();
@@ -155,7 +158,7 @@ function base64_to_blob(base64) {
         second_counter.innerHTML = time++;
       },1000);
 
-      // now record stream in 5 seconds interval
+      // now start recording stream as soon as text box is non empty
       var video_container = document.getElementById('video_container');
       var mediaRecorder = new MediaStreamRecorder(stream);
       var index = 1;
@@ -176,18 +179,20 @@ function base64_to_blob(base64) {
           });
       };
 
-      mediaRecorder.stop();
-      mediaRecorder.start(10000000);      
-      // var isRecording = false;
 
       $("#textbox").keyup(function( event ) {
         var currString = $("#textbox").val();
-        //console.log('currString:'+currString)
-        if (has_emotions(currString.slice(-3))) {
-          //console.log('recorded in real time')
+        if (!startWriting) {    // has not started typing yet
+          console.log('started typing now')
+          mediaRecorder.start(10000000); 
+          startWriting = true;
+          writingTimeStamp = new Date();
+        } else if (event.which == 13) {   // ENTER key was typed
+          console.log('ENTER key was typed')
+          startWriting = false;
           mediaRecorder.stop();
-          mediaRecorder.start(10000000);
-          // isRecording = true;
+        } else if (has_emotions(currString.slice(-3))) {  // checks emoticon
+          emoticonTimeArray.push(new Date()-writingTimeStamp);  // time in ms
         }
       });
 

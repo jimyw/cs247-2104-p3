@@ -9,6 +9,7 @@
   var options = ["lol",":-)",":-("];
   var recording = false;
   var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
+  var TIME_DELAY = 3000;  // 3 sec time delay
 
   $(document).ready(function(){
     connect_to_chat_firebase();
@@ -56,7 +57,7 @@
 
     // bind submission box
     $("#submission input").keydown(function( event ) {
-      if (!recording && event.which == 13) {
+      if (event.which == 13) {
         function onComplete(error) {
           if (!error) {
             videoBlobArray = new Array();
@@ -66,8 +67,12 @@
         if(has_emotions($(this).val())){
           console.log("HAS EMOTICONS");
           // console.log(videoBlobArray);
-          console.log(cur_video_blob)
-          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
+          // console.log(cur_video_blob)
+
+          // setTimeout(function(){
+            fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);  
+          // }, TIME_DELAY+50);
+          
           // fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
           console.log("DOES NOT HAVE EMOTICONS");
@@ -170,36 +175,31 @@
           });
       };
 
-      $("#textbox").keyup(function( event ) {
-        var currString = $("#textbox").val();
+      $("#textbox").keydown(function( event ) {
         //console.log('currString:'+currString)
-        if (has_emotions(currString.slice(-3))) {
-          console.log('Hit SPACE to record yourself')
+        if (has_emotions($("#textbox").val().slice(-3))) {
+          console.log('Hit SPACE or ENTER to record yourself')
 
-
-
-          $("#textbox").keyup(function( event ) {
+          // $("#textbox").keyup(function( event ) {
             
             
-            if (event.which == 32) { // ESC is pressed
+            if (event.which == 32 || event.which == 13) { // SPACE is pressed
               console.log('recording now')
               recording = true;
-              mediaRecorder.start(5000);
-              console.log(' Now hit ENTER to stop recording');
+              mediaRecorder.start(TIME_DELAY);
+              // console.log(' Now hit ENTER to stop recording');
 
-              $("#textbox").keyup(function( event ) {
-                if (event.which == 13) { // enter is pressed
-                    recording = false;
-                    // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
-                }
-              });
+              // $("#textbox").keyup(function( event ) {
+              //   if (event.which == 13) { // enter is pressed
+              //       recording = false;
+              //       // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
+              //   }
+              // });
             }
           console.log(' Hit Enter to send')
             // isRecording = true;
 
-            
-
-          });
+          // });
         }
       });
 
