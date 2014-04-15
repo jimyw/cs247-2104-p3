@@ -8,6 +8,8 @@ var VIDEO_HEIGHT = 80;
 function receiveTwo(msg, videos, color){
   console.log("videos");
   console.log(videos);
+  var outerDiv = document.createElement("div");
+  outerDiv.style.color = color;
   var splitMsg = msg.match(/\S+/g);
   var totalTime = 0;
   var currentVideoIndex = 0;
@@ -15,28 +17,28 @@ function receiveTwo(msg, videos, color){
     if(isEmoticon(token)){
       var thisVideoIndex = currentVideoIndex;
       setTimeout(function(){
-        displayVideo(videos[thisVideoIndex]);
+        displayVideo(videos[thisVideoIndex], outerDiv);
       }, totalTime);
       totalTime += VIDEO_TIME_INTERVAL;
       currentVideoIndex += 1;
     } else {
       setTimeout(function(){
-        displayWord(token);
+        displayWord(token, outerDiv);
       }, totalTime);
       totalTime += WORD_TIME_INTERVAL;
       
     };
   });
-  $("#receive_two_display").html($("#receive_two_display").html() + "</br>");
+  document.getElementById("receive_two_display").appendChild(outerDiv);
 }
 
 
-function displayWord(token){
+function displayWord(token, outerDiv){
   // $("#receive_two_display").
   if(version === "A"){
-    $("#receive_two_display").html(token);
+    outerDiv.innerHTML = token;
   } else {
-    $("#receive_two_display").html($('#receive_two_display').html() + " " + token);
+    outerDiv.innerHTML = outerDiv.innerHTML + " " + token;
   }
 }
 
@@ -50,7 +52,7 @@ function isEmoticon(token){
 }
 
 // Function takes a vidxeo blob, converts it, and displays it.
-function displayVideo(videoBlob){
+function displayVideo(videoBlob, outerDiv){
   var video = document.createElement("video");
   video.setAttribute("class", "videoClasses")
   video.autoplay = true;
@@ -63,9 +65,9 @@ function displayVideo(videoBlob){
 
   video.appendChild(source);
   if(version === "A"){
-    document.getElementById("receive_two_display").innerHTML = "";
+    outerDiv.innerHTML = "";
   }else{
 
   }
-  document.getElementById("receive_two_display").appendChild(video);
+  outerDiv.appendChild(video);
 }

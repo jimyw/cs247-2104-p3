@@ -8,6 +8,9 @@ function receiveOne(msg, video, times){
   var msgDiv = document.createElement("div");
   msgDiv.innerHTML = msg;
   document.getElementById("receive_one_display").appendChild(msgDiv);
+  if(video == null){
+    return;
+  }
   var videoDiv = createVideoDiv(video);
   $("#receive_one_display").append(videoDiv);
   // Add container div to hold emoticons
