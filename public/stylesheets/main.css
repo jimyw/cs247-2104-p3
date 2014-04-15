@@ -40,7 +40,13 @@ a {
   padding: 15px;
   outline: none;
   box-sizing: border-box;
-  width: 100%;
+  width: 90%;
+}
+#submission #recordButton {
+  max-width: 10%;
+  max-height: 10%;
+  float: right;
+  display: none;
 }
 #waiting {
   position: fixed;
