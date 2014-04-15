@@ -12,6 +12,7 @@ var base64_to_blob = function(base64) {
   var blob = new Blob([view]);
   return blob;
 };
+var TIME_DELAY = 3000;  // 3 sec time delay
 
 (function() {
 
@@ -21,7 +22,6 @@ var base64_to_blob = function(base64) {
   var options = ["lol",":-)",":-("];
   var recording = false;
   var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
-  var TIME_DELAY = 3000;  // 3 sec time delay
   var msg = null;
 
   $(document).ready(function(){

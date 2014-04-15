@@ -1,10 +1,12 @@
-var WORD_TIME_INTERVAL = 2000;
-var VIDEO_TIME_INTERVAL = 5000;
-
+var WORD_TIME_INTERVAL = 1000;
+var VIDEO_TIME_INTERVAL = TIME_DELAY;
+var version = "B"; // Can be 'B'
 
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
 function receiveTwo(msg, videos){
+  console.log("videos");
+  console.log(videos);
   var splitMsg = msg.match(/\S+/g);
   var totalTime = 0;
   var currentVideoIndex = 0;
@@ -27,7 +29,11 @@ function receiveTwo(msg, videos){
 
 
 function displayWord(token){
-  $("#receive_one_display").html(token);
+  if(version === "A"){
+    $("#receive_one_display").html(token);
+  } else {
+    $("#receive_one_display").html($('#receive_one_display').html() + " " + token);
+  }
 }
 
 String.prototype.startsWith = function (str){
@@ -51,6 +57,10 @@ function displayVideo(videoBlob){
   source.type =  "video/webm";
 
   video.appendChild(source);
-  document.getElementById("receive_one_display").innerHTML = "";
+  if(version === "A"){
+    document.getElementById("receive_one_display").innerHTML = "";
+  }else{
+
+  }
   document.getElementById("receive_one_display").appendChild(video);
 }
