@@ -4,6 +4,7 @@ exports.index = function(req, res){
 };
 
 exports.v1 = function(req,res) {
+  console.log(req.params.room_id);
 	res.render('index', { title: 'CS247 Chatroom v1', version: 1 });
 };
 

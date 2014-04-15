@@ -25,6 +25,7 @@ function receiveTwo(msg, videos){
       
     };
   });
+  $("#receive_one_display").html($("#receive_one_display").html() + "</br>");
 }
 
 

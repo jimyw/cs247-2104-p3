@@ -40,6 +40,8 @@ function base64_to_blob(base64) {
     }else{
       fb_chat_room_id = Math.random().toString(36).substring(7);
     }
+    console.log("fb chat room id");
+    console.log(fb_chat_room_id);
     display_msg({m:"Share this url with your friend to join this chat: "+ document.location.origin+"/#"+fb_chat_room_id,c:"red"})
     console.log('starting')
     // set up variables to access firebase data structure
