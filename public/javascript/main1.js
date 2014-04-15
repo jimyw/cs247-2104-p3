@@ -58,7 +58,7 @@ function base64_to_blob(base64) {
       //display_msg(snapshot.val());
       console.log("snapsnot . v");
       //console.log(snapshot.val().v);
-      receiveOne(snapshot.val().m, snapshot.val().v, snapshot.val().t);
+      receiveOne(snapshot.val().m, snapshot.val().v, snapshot.val().t, snapshot.val().c);
     });
 
     // block until username is answered

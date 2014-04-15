@@ -10,6 +10,13 @@ function receiveTwo(msg, videos, color){
   console.log(videos);
   var outerDiv = document.createElement("div");
   outerDiv.style.color = color;
+  if(videos === undefined){
+    outerDiv.style.margin = "20px 0 0 0 ";
+  } else{
+    if(videos.length == 0){
+      outerDiv.style.margin = "20px 0 0 0 ";
+    }
+  }
   var splitMsg = msg.match(/\S+/g);
   var totalTime = 0;
   var currentVideoIndex = 0;

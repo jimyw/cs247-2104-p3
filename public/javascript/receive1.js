@@ -1,11 +1,12 @@
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
-function receiveOne(msg, video, times){
+function receiveOne(msg, video, times, color){
   console.log(times);
   // Get array of emoticons.
   var emoticons = getEmoticons(msg);
   // Display message and video. 
   var msgDiv = document.createElement("div");
+  msgDiv.style.color = color;
   msgDiv.innerHTML = msg;
   document.getElementById("receive_one_display").appendChild(msgDiv);
   if(video == null){
