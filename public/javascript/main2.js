@@ -1,6 +1,18 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
 
+var base64_to_blob = function(base64) {
+  var binary = atob(base64);
+  var len = binary.length;
+  var buffer = new ArrayBuffer(len);
+  var view = new Uint8Array(buffer);
+  for (var i = 0; i < len; i++) {
+    view[i] = binary.charCodeAt(i);
+  }
+  var blob = new Blob([view]);
+  return blob;
+};
+
 (function() {
 
   var cur_video_blob = null;
@@ -10,6 +22,7 @@
   var recording = false;
   var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
   var TIME_DELAY = 3000;  // 3 sec time delay
+  var msg = null;
 
   $(document).ready(function(){
     connect_to_chat_firebase();
@@ -40,10 +53,10 @@
       display_msg({m:snapshot.val().name+" joined the room",c: snapshot.val().c});
     });
     fb_instance_stream.on("child_added",function(snapshot){
-      display_msg(snapshot.val());
+      // display_msg(snapshot.val());
       console.log("snapsnot . v");
       // console.log(snapshot.val().v);
-      // receiveOne(snapshot.val().m, snapshot.val().v);
+      receiveTwo(snapshot.val().m, snapshot.val().v);
     });
 
     // block until username is answered
@@ -64,26 +77,27 @@
             console.log(videoBlobArray);
           }
         }
+        var textMessage = $(this).val();
+
         if(has_emotions($(this).val())){
           console.log("HAS EMOTICONS");
           // console.log(videoBlobArray);
           // console.log(cur_video_blob)
 
           if ($("#recordButton").css('display') == "none") {
-            fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);  
+            fb_instance_stream.push({m:username+": " +textMessage, v:videoBlobArray, c: my_color}, onComplete);  
           } else {
-            var that = this;
+            // var that = this;
             console.log('not finished recording yet')
             setTimeout(function(){
               console.log('delay happen?')
-              fb_instance_stream.push({m:username+": " +$(that).val(), v:cur_video_blob, c: my_color}, onComplete);  
+              fb_instance_stream.push({m:username+": " +textMessage, v:videoBlobArray, c: my_color}, onComplete);  
               console.log('after delay?')
             }, TIME_DELAY+10);
           }
-          // fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
           console.log("DOES NOT HAVE EMOTICONS");
-          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color}, onComplete);
+          fb_instance_stream.push({m:username+": " +textMessage, c: my_color}, onComplete);
         }
         videoBlobArray = new Array();
         $(this).val("");
@@ -182,15 +196,11 @@
           });
       };
 
-      $("#textbox").keydown(function( event ) {
+      $("#textbox").keyup(function( event ) {
         //console.log('currString:'+currString)
-        if (has_emotions($("#textbox").val().slice(-3))) {
-          // console.log('Hit SPACE or ENTER to record yourself')
+        var currMessage = $("#textbox").val();
+        if (msg != currMessage && has_emotions(currMessage.slice(-3))) {
 
-          // $("#textbox").keyup(function( event ) {
-            
-            // if (event.which == 32 || event.which == 13) { // SPACE is pressed
-              
 
               console.log('recording now')
               $("#recordButton").css("display","inline");
@@ -202,18 +212,6 @@
               },TIME_DELAY);
 
 
-              // console.log(' Now hit ENTER to stop recording');
-
-              // $("#textbox").keyup(function( event ) {
-              //   if (event.which == 13) { // enter is pressed
-              //       recording = false;
-              //       // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
-              //   }
-              // });
-            // }
-            // isRecording = true;
-
-          // });
         }
       });
       console.log("connect to media stream!");
@@ -229,9 +227,9 @@
   }
 
   // check to see if a message qualifies to be replaced with video.
-  var has_emotions = function(msg){
+  var has_emotions = function(message){
     for(var i=0;i<options.length;i++){
-      if(msg.indexOf(options[i])!= -1){
+      if(message.indexOf(options[i])!= -1){
         return true;
       }
     }
@@ -252,16 +250,6 @@
     reader.readAsDataURL(blob);
   };
 
-  var base64_to_blob = function(base64) {
-    var binary = atob(base64);
-    var len = binary.length;
-    var buffer = new ArrayBuffer(len);
-    var view = new Uint8Array(buffer);
-    for (var i = 0; i < len; i++) {
-      view[i] = binary.charCodeAt(i);
-    }
-    var blob = new Blob([view]);
-    return blob;
-  };
+
 
 })();
