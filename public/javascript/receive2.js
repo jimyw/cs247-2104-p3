@@ -4,8 +4,8 @@ var version = "B"; // Can be 'B'
 var VIDEO_HEIGHT = 80;
 
 // Given a new message string and an array of videos, detects each emoticon position
-// in the string, replaces them with the videos and shows them to the user one word/video at a time
-function receiveTwo(msg, videos){
+// in the string, replaces them with the videos and shows them to the user two word/video at a time
+function receiveTwo(msg, videos, color){
   console.log("videos");
   console.log(videos);
   var splitMsg = msg.match(/\S+/g);
@@ -27,15 +27,16 @@ function receiveTwo(msg, videos){
       
     };
   });
-  $("#receive_one_display").html($("#receive_one_display").html() + "</br>");
+  $("#receive_two_display").html($("#receive_two_display").html() + "</br>");
 }
 
 
 function displayWord(token){
+  // $("#receive_two_display").
   if(version === "A"){
-    $("#receive_one_display").html(token);
+    $("#receive_two_display").html(token);
   } else {
-    $("#receive_one_display").html($('#receive_one_display').html() + " " + token);
+    $("#receive_two_display").html($('#receive_two_display').html() + " " + token);
   }
 }
 
@@ -62,9 +63,9 @@ function displayVideo(videoBlob){
 
   video.appendChild(source);
   if(version === "A"){
-    document.getElementById("receive_one_display").innerHTML = "";
+    document.getElementById("receive_two_display").innerHTML = "";
   }else{
 
   }
-  document.getElementById("receive_one_display").appendChild(video);
+  document.getElementById("receive_two_display").appendChild(video);
 }

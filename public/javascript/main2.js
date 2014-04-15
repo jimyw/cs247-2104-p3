@@ -56,17 +56,14 @@ var TIME_DELAY = 3000;  // 3 sec time delay
     });
     fb_instance_stream.on("child_added",function(snapshot){
       // display_msg(snapshot.val());
-      console.log("snapsnot . v");
-      // console.log(snapshot.val().v);
-      receiveTwo(snapshot.val().m, snapshot.val().v);
+      receiveTwo(snapshot.val().m, snapshot.val().v, snapshot.val().c);
     });
 
     // block until username is answered
-    // var username = window.prompt("Welcome, warrior! please declare your name?");
-    // if(!username){
-    //   username = "anonymous"+Math.floor(Math.random()*1111);
-    // }
-    var username = "anonymous"+Math.floor(Math.random()*1111);
+    var username = window.prompt("Welcome, warrior! please declare your name?");
+    if(!username){
+      username = "anonymous"+Math.floor(Math.random()*1111);
+    }
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
 
@@ -121,7 +118,8 @@ var TIME_DELAY = 3000;  // 3 sec time delay
       video.autoplay = true;
       video.controls = false; // optional
       video.loop = true;
-      video.width = 120;
+      video.height = 80;
+      // video.width = 80;
 
       var source = document.createElement("source");
       source.src =  URL.createObjectURL(base64_to_blob(data.v));

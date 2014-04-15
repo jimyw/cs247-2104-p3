@@ -18,6 +18,7 @@ function receiveOne(msg, video, times){
   emoticonDiv.style.backgroundColor = "white";
   videoDiv.appendChild(emoticonDiv);
   // Settimeouts to display emoticons and time intervals from array.
+  
   times.forEach(function(time, index){
     var x = index;
     setTimeout(function(){
