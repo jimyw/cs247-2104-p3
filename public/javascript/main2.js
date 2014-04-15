@@ -56,7 +56,7 @@
     $("#waiting").remove();
 
     // bind submission box
-    $("#submission input").keydown(function( event ) {
+    $("#submission input").keyup(function( event ) {
       if (event.which == 13) {
         function onComplete(error) {
           if (!error) {
@@ -69,10 +69,17 @@
           // console.log(videoBlobArray);
           // console.log(cur_video_blob)
 
-          // setTimeout(function(){
+          if ($("#recordButton").css('display') == "none") {
             fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);  
-          // }, TIME_DELAY+50);
-          
+          } else {
+            var that = this;
+            console.log('not finished recording yet')
+            setTimeout(function(){
+              console.log('delay happen?')
+              fb_instance_stream.push({m:username+": " +$(that).val(), v:cur_video_blob, c: my_color}, onComplete);  
+              console.log('after delay?')
+            }, TIME_DELAY+10);
+          }
           // fb_instance_stream.push({m:username+": " +$(this).val(), v: videoBlobArray, c: my_color});
         }else{
           console.log("DOES NOT HAVE EMOTICONS");
@@ -178,15 +185,23 @@
       $("#textbox").keydown(function( event ) {
         //console.log('currString:'+currString)
         if (has_emotions($("#textbox").val().slice(-3))) {
-          console.log('Hit SPACE or ENTER to record yourself')
+          // console.log('Hit SPACE or ENTER to record yourself')
 
           // $("#textbox").keyup(function( event ) {
             
-            
-            if (event.which == 32 || event.which == 13) { // SPACE is pressed
+            // if (event.which == 32 || event.which == 13) { // SPACE is pressed
+              
+
               console.log('recording now')
+              $("#recordButton").css("display","inline");
               recording = true;
+              // mediaRecorder.stop(); // stop previous recording and start new one
               mediaRecorder.start(TIME_DELAY);
+              setTimeout(function() {
+                $("#recordButton").css("display","none");
+              },TIME_DELAY);
+
+
               // console.log(' Now hit ENTER to stop recording');
 
               // $("#textbox").keyup(function( event ) {
@@ -195,19 +210,12 @@
               //       // fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color}, onComplete);
               //   }
               // });
-            }
-          console.log(' Hit Enter to send')
+            // }
             // isRecording = true;
 
           // });
         }
       });
-
-      // setInterval( function() {
-      //   mediaRecorder.stop();
-      //   mediaRecorder.start(3000);
-      // }, 3000 );
-
       console.log("connect to media stream!");
     }
 
