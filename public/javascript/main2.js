@@ -27,6 +27,8 @@ var TIME_DELAY = 3000;  // 3 sec time delay
   $(document).ready(function(){
     connect_to_chat_firebase();
     connect_webcam();
+    console.log('initializing')
+    console.log(videoBlobArray);
   });
 
   function connect_to_chat_firebase(){
@@ -74,6 +76,7 @@ var TIME_DELAY = 3000;  // 3 sec time delay
         function onComplete(error) {
           if (!error) {
             videoBlobArray = new Array();
+            console.log('onComplete')
             console.log(videoBlobArray);
           }
         }
@@ -99,7 +102,7 @@ var TIME_DELAY = 3000;  // 3 sec time delay
           console.log("DOES NOT HAVE EMOTICONS");
           fb_instance_stream.push({m:username+": " +textMessage, c: my_color}, onComplete);
         }
-        videoBlobArray = new Array();
+        // videoBlobArray = new Array();
         $(this).val("");
         scroll_to_bottom(0);
       }
@@ -192,6 +195,8 @@ var TIME_DELAY = 3000;  // 3 sec time delay
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             videoBlobArray.push(cur_video_blob);
+            // console.log(cur_video_blob);
+            console.log(videoBlobArray);
           });
       };
 

@@ -1,6 +1,7 @@
 var WORD_TIME_INTERVAL = 1000;
 var VIDEO_TIME_INTERVAL = TIME_DELAY;
-var version = "A"; // Can be 'B'
+var version = "B"; // Can be 'B'
+var VIDEO_HEIGHT = 80;
 
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
@@ -17,6 +18,7 @@ function receiveTwo(msg, videos){
         displayVideo(videos[thisVideoIndex]);
       }, totalTime);
       totalTime += VIDEO_TIME_INTERVAL;
+      currentVideoIndex += 1;
     } else {
       setTimeout(function(){
         displayWord(token);
@@ -49,10 +51,11 @@ function isEmoticon(token){
 // Function takes a vidxeo blob, converts it, and displays it.
 function displayVideo(videoBlob){
   var video = document.createElement("video");
+  video.setAttribute("class", "videoClasses")
   video.autoplay = true;
   video.controls = false; // optional
   video.loop = true;
-  video.width = 120;
+  video.height = VIDEO_HEIGHT;
   var source = document.createElement("source");
   source.src =  URL.createObjectURL(base64_to_blob(videoBlob));
   source.type =  "video/webm";
