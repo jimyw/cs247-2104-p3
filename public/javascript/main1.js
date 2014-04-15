@@ -22,9 +22,9 @@ function base64_to_blob(base64) {
   var startWriting = false;  // checks if user is typing something
   var writingTimeStamp;
   var emoticonTimeArray = new Array();  // time in miliseconds for when emoticon was detected
+  var msg = null;
 
   $(document).ready(function(){
-    initialize_receive_one();
     connect_to_chat_firebase();
     connect_webcam();
   });
@@ -45,8 +45,8 @@ function base64_to_blob(base64) {
     // set up variables to access firebase data structure
     var fb_new_chat_room = fb_instance.child('chatrooms').child(fb_chat_room_id);
     var fb_instance_users = fb_new_chat_room.child('users');
-    var fb_instance_stream = fb_new_chat_room.child('stream');
-    var my_color = "#"+((1<<24)*Math.random()|0).toString(16);
+    fb_instance_stream = fb_new_chat_room.child('stream');
+    my_color = "#"+((1<<24)*Math.random()|0).toString(16);
 
     // listen to events
     fb_instance_users.on("child_added",function(snapshot){
@@ -55,12 +55,12 @@ function base64_to_blob(base64) {
     fb_instance_stream.on("child_added",function(snapshot){
       //display_msg(snapshot.val());
       console.log("snapsnot . v");
-      console.log(snapshot.val().v);
+      //console.log(snapshot.val().v);
       receiveOne(snapshot.val().m, snapshot.val().v, snapshot.val().t);
     });
 
     // block until username is answered
-    var username = window.prompt("Welcome, warrior! please declare your name?");
+    username = window.prompt("Welcome, warrior! please declare your name?");
     if(!username){
       username = "anonymous"+Math.floor(Math.random()*1111);
     }
@@ -69,22 +69,29 @@ function base64_to_blob(base64) {
 
     // bind submission box
     $("#submission input").keyup(function( event ) {
+      console.log("firing keyup");
+      
+      var currString = $("#textbox").val();
+      if (!startWriting) {    // has not started typing yet
+        console.log('started typing now')
+        mediaRecorder.start(10000000); 
+        startWriting = true;
+        writingTimeStamp = new Date();
+      } else if (event.which == 13) {   // ENTER key was typed
+        console.log('ENTER key was typed')
+        startWriting = false;
+        mediaRecorder.stop();
+      } else if (msg !== $("#textbox").val() && has_emotions(currString.slice(-3))) {  // checks emoticon
+        console.log("emoticon detected");
+        emoticonTimeArray.push(new Date()-writingTimeStamp);  // time in ms
+      }
+      msg = $("#textbox").val();
       if (event.which == 13) {
-        function onComplete(error) {
-          if (!error) {
-            videoBlobArray = new Array();
-          }
-        }
 
-        if(has_emotions($(this).val())){
-          console.log("HAS EMOTICONS");
-          console.log(videoBlobArray);
-          fb_instance_stream.push({m:username+": " +$(this).val(), v: cur_video_blob, c: my_color, t: emoticonTimeArray}, onComplete);
-        }else{
-          console.log("DOES NOT HAVE EMOTICONS");
-          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color}, onComplete);
-        }
+        
 
+        msg = $(this).val();
+        
         $(this).val("");
         scroll_to_bottom(0);
       }
@@ -160,7 +167,7 @@ function base64_to_blob(base64) {
 
       // now start recording stream as soon as text box is non empty
       var video_container = document.getElementById('video_container');
-      var mediaRecorder = new MediaStreamRecorder(stream);
+      mediaRecorder = new MediaStreamRecorder(stream);
       var index = 1;
 
       mediaRecorder.mimeType = 'video/webm';
@@ -171,16 +178,34 @@ function base64_to_blob(base64) {
 
       mediaRecorder.ondataavailable = function (blob) {
           video_container.innerHTML = "";
-
+          
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             videoBlobArray.push(cur_video_blob);
+            function onComplete(error) {
+              if (!error) {
+                videoBlobArray = new Array();
+              }
+            }
+            if(has_emotions(msg)){
+            //  console.log("HAS EMOTICONS");
+              //console.log(videoBlobArray);
+              
+              //console.log(emoticonTimeArray);
+              fb_instance_stream.push({m:username+": " +msg, v: cur_video_blob, c: my_color, t: emoticonTimeArray}, onComplete);
+            }else{
+              //console.log("DOES NOT HAVE EMOTICONS");
+              fb_instance_stream.push({m:username+": " +msg, c: my_color}, onComplete);
+            }
+            emoticonTimeArray = new Array();  // time in miliseconds for when emoticon was detected
           });
+          //console.log('cur video blob in dataavaiable');
+          //console.log(cur_video_blob)
       };
 
-
-      $("#textbox").keydown(function( event ) {
+/*
+      $("#textbox").keyup(function( event ) {
         var currString = $("#textbox").val();
         if (!startWriting) {    // has not started typing yet
           console.log('started typing now')
@@ -192,10 +217,11 @@ function base64_to_blob(base64) {
           startWriting = false;
           mediaRecorder.stop();
         } else if (has_emotions(currString.slice(-3))) {  // checks emoticon
+          console.log("emoticon detected");
           emoticonTimeArray.push(new Date()-writingTimeStamp);  // time in ms
         }
       });
-
+*/
       console.log("connect to media stream!");
     }
 

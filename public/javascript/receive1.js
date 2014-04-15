@@ -1,21 +1,28 @@
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
 function receiveOne(msg, video, times){
+  console.log(times);
   // Get array of emoticons.
   var emoticons = getEmoticons(msg);
   // Display message and video. 
   var msgDiv = document.createElement("div");
   msgDiv.innerHTML = msg;
   document.getElementById("receive_one_display").appendChild(msgDiv);
-  $("#receive_one_display").append(createDisplayDiv(video));
+  var videoDiv = createVideoDiv(video);
+  $("#receive_one_display").append(videoDiv);
   // Add container div to hold emoticons
   var emoticonDiv = document.createElement("div");
-  emoticonDiv.id = "emoticon_div";
-  document.getElementById("receive_one_display").appendChild(emoticonDiv);
+  emoticonDiv.style.position = "absolute";
+  emoticonDiv.style.left = "4px";
+  emoticonDiv.style.bottom = "4px";
+  emoticonDiv.style.backgroundColor = "white";
+  videoDiv.appendChild(emoticonDiv);
   // Settimeouts to display emoticons and time intervals from array.
   times.forEach(function(time, index){
+    var x = index;
     setTimeout(function(){
-      $("#emoticon_div").html(emoticons[index]);
+      console.log(x);
+      emoticonDiv.innerHTML = emoticons[x];
     }, time);
   });
 }
@@ -37,7 +44,7 @@ function createVideoDiv(videoBlob, videoIndex){
 
   video.appendChild(source);
   var div = document.createElement("div");
-  div.id = "video_div";
+  div.style.position = "relative";
   div.appendChild(video);
   return div;
 }
