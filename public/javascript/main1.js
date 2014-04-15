@@ -1,6 +1,6 @@
 // Initial code by Borui Wang, updated by Graham Roth
 // For CS247, Spring 2014
-
+console.log('starting file')
 function base64_to_blob(base64) {
   var binary = atob(base64);
   var len = binary.length;
@@ -35,6 +35,7 @@ function base64_to_blob(base64) {
 
     // generate new chatroom id or use existing id
     var url_segments = document.location.href.split("/#");
+    console.log(url_segments);
     if(url_segments[1]){
       fb_chat_room_id = url_segments[1];
     }else{
