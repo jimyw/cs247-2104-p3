@@ -185,14 +185,13 @@ var TIME_DELAY = 3000;  // 3 sec time delay
       mediaRecorder.video_height = video_height/2;
 
       mediaRecorder.ondataavailable = function (blob) {
-          //console.log("new data available!");
+          console.log("new data available!");
           video_container.innerHTML = "";
 
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
             videoBlobArray.push(cur_video_blob);
-
           });
       };
 
@@ -200,8 +199,6 @@ var TIME_DELAY = 3000;  // 3 sec time delay
         //console.log('currString:'+currString)
         var currMessage = $("#textbox").val();
         if (msg != currMessage && has_emotions(currMessage.slice(-3))) {
-
-
               console.log('recording now')
               $("#recordButton").css("display","inline");
               recording = true;
@@ -210,8 +207,6 @@ var TIME_DELAY = 3000;  // 3 sec time delay
               setTimeout(function() {
                 $("#recordButton").css("display","none");
               },TIME_DELAY);
-
-
         }
       });
       console.log("connect to media stream!");
