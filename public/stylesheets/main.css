@@ -27,7 +27,7 @@ a {
   height: 100%;
 }
 #receive_one_display {
-  font-size: 50px;
+  font-size: 20px;
 }
 #receive_one_display video {
   position: relative;

@@ -1,39 +1,54 @@
+var WORD_TIME_INTERVAL = 1000;
+var VIDEO_TIME_INTERVAL = TIME_DELAY;
+var version = "B"; // Can be 'B'
+
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time
-function receiveOne(msg, video, times){
-  console.log(times);
-  // Get array of emoticons.
-  var emoticons = getEmoticons(msg);
-  // Display message and video. 
-  var msgDiv = document.createElement("div");
-  msgDiv.innerHTML = msg;
-  document.getElementById("receive_one_display").appendChild(msgDiv);
-  var videoDiv = createVideoDiv(video);
-  $("#receive_one_display").append(videoDiv);
-  // Add container div to hold emoticons
-  var emoticonDiv = document.createElement("div");
-  emoticonDiv.style.position = "absolute";
-  emoticonDiv.style.left = "4px";
-  emoticonDiv.style.bottom = "4px";
-  emoticonDiv.style.backgroundColor = "white";
-  videoDiv.appendChild(emoticonDiv);
-  // Settimeouts to display emoticons and time intervals from array.
-  times.forEach(function(time, index){
-    var x = index;
-    setTimeout(function(){
-      console.log(x);
-      emoticonDiv.innerHTML = emoticons[x];
-    }, time);
+function receiveOne(msg, videos){
+  console.log("videos");
+  console.log(videos);
+  var splitMsg = msg.match(/\S+/g);
+  var totalTime = 0;
+  var currentVideoIndex = 0;
+  splitMsg.forEach(function(token, index){
+    if(isEmoticon(token)){
+      var thisVideoIndex = currentVideoIndex;
+      setTimeout(function(){
+        displayVideo(videos[thisVideoIndex]);
+      }, totalTime);
+      totalTime += VIDEO_TIME_INTERVAL;
+    } else {
+      setTimeout(function(){
+        displayWord(token);
+      }, totalTime);
+      totalTime += WORD_TIME_INTERVAL;
+      
+    };
   });
+  $("#receive_one_display").html($("#receive_one_display").html() + "</br>");
 }
 
-function getEmoticons(msg){
-  return msg.match(/:-\)|:-\(|lol/g);
+
+function displayWord(token){
+  if(version === "A"){
+    $("#receive_one_display").html(token);
+  } else {
+    $("#receive_one_display").html($('#receive_one_display').html() + " " + token);
+  }
 }
 
-function createVideoDiv(videoBlob, videoIndex){
+String.prototype.startsWith = function (str){
+  return this.indexOf(str) == 0;
+};
+
+
+function isEmoticon(token){
+  return token === ":-)" || token === ":-(" || token === "lol";
+}
+
+// Function takes a vidxeo blob, converts it, and displays it.
+function displayVideo(videoBlob){
   var video = document.createElement("video");
-  video.id = "video" + videoIndex;
   video.autoplay = true;
   video.controls = false; // optional
   video.loop = true;
@@ -43,8 +58,10 @@ function createVideoDiv(videoBlob, videoIndex){
   source.type =  "video/webm";
 
   video.appendChild(source);
-  var div = document.createElement("div");
-  div.style.position = "relative";
-  div.appendChild(video);
-  return div;
+  if(version === "A"){
+    document.getElementById("receive_one_display").innerHTML = "";
+  }else{
+
+  }
+  document.getElementById("receive_one_display").appendChild(video);
 }

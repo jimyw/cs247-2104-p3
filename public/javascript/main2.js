@@ -27,6 +27,8 @@ var TIME_DELAY = 3000;  // 3 sec time delay
   $(document).ready(function(){
     connect_to_chat_firebase();
     connect_webcam();
+    // $("#receive_one_display").css('text-align','center');
+    // $("#receive_one_display").css("font-size",'50')
   });
 
   function connect_to_chat_firebase(){

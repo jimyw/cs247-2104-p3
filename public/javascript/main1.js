@@ -13,6 +13,8 @@ function base64_to_blob(base64) {
   return blob;
   };
 
+var TIME_DELAY = 3000;
+
 (function() {
 
   var cur_video_blob = null;
@@ -23,6 +25,7 @@ function base64_to_blob(base64) {
   var writingTimeStamp;
   var emoticonTimeArray = new Array();  // time in miliseconds for when emoticon was detected
   var msg = null;
+
 
   $(document).ready(function(){
     connect_to_chat_firebase();
