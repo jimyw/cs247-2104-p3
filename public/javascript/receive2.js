@@ -1,6 +1,6 @@
 var WORD_TIME_INTERVAL = 1000;
 var VIDEO_TIME_INTERVAL = TIME_DELAY;
-var version = "B"; // Can be 'B'
+var version = "A"; // Can be 'B'
 
 // Given a new message string and an array of videos, detects each emoticon position
 // in the string, replaces them with the videos and shows them to the user one word/video at a time

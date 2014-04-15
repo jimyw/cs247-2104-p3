@@ -41,7 +41,7 @@ app.use(app.router);
 
 // Declare your routes here
 app.get('/v1',index.v1);
-app.get('/v2',index.v2);
+app.get('/',index.v2);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
